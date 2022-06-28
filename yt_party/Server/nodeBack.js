@@ -2,6 +2,7 @@ const express = require('express')
 const app = express();
 const port = 3006;
 var cors = require('cors')
+
 const Twit = require('twit')
 const fs = require('fs');
 
@@ -36,6 +37,7 @@ app.get('/', (req, res) => {
             //console.log(data);
             res.setHeader('Content-Type', 'application/json');
             //res.setHeader('Access-Control-Allow-Origin', '*');
+            console.log("Updated...");
             return res.send(JSON.stringify(data))
             //return res.send(data)
         })
@@ -44,7 +46,7 @@ app.get('/', (req, res) => {
 });
 
 app.listen(port, () => {
-  console.log(`Example app listening on port ${port}`)
+  console.log(`App listening on port ${port}`)
 })
 
 var T = new Twit({
@@ -92,7 +94,6 @@ const getTwit = async () => {
 }
 async function parseTwiit(data) {
     tweetsFetch = [];
-    
     tweets = data?.statuses;
     tweets.map((tweetAct) => {
         let newTweet = Object.create(sharedTweet);
@@ -131,6 +132,7 @@ async function verifyData(data) {
     },[]);
 
     let evil = JSON.stringify(result);
-    fs.writeFileSync('input.json', evil);
+    //console.log(result);
+    fs.writeFileSync('./Server/input.json', evil);
     return result;
 }

@@ -157,8 +157,6 @@ const App = () => {
     };
 
     const vidEnd = () => {
-    //console.log(length + "-" + current);
-    //setCurrent(current => (current === length - 1 ? 0 : current + 1));
       if (!newVid) {
         setCurrent(current => (current === length - 1 ? 0 : current + 1));
         getNewData();
@@ -169,7 +167,7 @@ const App = () => {
         getNewData();
       }
     };
-    tooLong.current = setTimeout(vidEnd, 50000);
+    tooLong.current = setTimeout(vidEnd,300000);
     
     return function () {
             if (tooLong.current) {
