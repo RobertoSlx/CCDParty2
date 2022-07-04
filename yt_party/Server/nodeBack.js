@@ -13,23 +13,21 @@ const Apikey = 'cxLckYIvlJnCqmiSvb0MUw8xr'
 const ApiSecretKey = '54xRPs4fOLW5726kYKKcmU2fl1ypXEJb5BlZWWC3fR5T3Fx6O9'
 const AccessToken = '1373515026867359744-QVvFt3b5QxhSjf0IdRp0Ej0cxBEzoI'
 const AccessTokenSecret = 'fbxPuUTbw4O5ZcRyZCCQw68qi9TA7ThlM2xy5mQWEfsHU'
-// const corsOpts = {
-//   origin: '*',
+const corsOpts = {
+  origin: '*',
+  methods: [
+    'GET',
+    'POST',
+  ],
+  allowedHeaders: [
+      'Content-Type',
+      'Access-Control-Allow-Origin: *'
+  ],
+};
 
-//   methods: [
-//     'GET',
-//     'POST',
-//   ],
-
-//   allowedHeaders: [
-//       'Content-Type',
-//       'Access-Control-Allow-Origin: *'
-//   ],
-// };
-
-//app.use(express.static('public'));
-//app.use(cors({ credentials: true, origin: "http://localhost:3006" }));
-//app.use(cors(corsOpts));
+app.use(express.static('public'));
+app.use(cors({ credentials: true, origin: "http://localhost:3006" }));
+app.use(cors(corsOpts));
 
 app.get('/', (req, res) => {
     getTwit()
@@ -126,7 +124,7 @@ async function verifyData(data) {
 
     var result = PrevTwitts.reduce((unique, o) => {
     if(!unique.some(obj => obj.vidUrl === o.vidUrl)) {
-      unique.push(o);
+        unique.push(o);
     }
     return unique;
     },[]);

@@ -2,6 +2,8 @@ import React from 'react';
 import videojs from 'video.js';
 import './video-js.css';
 
+// No incluido en el proyecto, no funciona para videoss consecutivos
+
 export const VideoJS = (props) => {
   const videoRef = React.useRef(null);
   const playerRef = React.useRef(null);

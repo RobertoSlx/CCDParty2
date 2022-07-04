@@ -2,7 +2,7 @@
 import React from 'react';
 import YouTube from 'react-youtube';
 
-//let VideoId = "Y3HPkXHxS_s";
+// Parametros del video via Youtube Embed function
 let opts = {
     height: '390',
     width: '640',
@@ -12,6 +12,7 @@ let opts = {
     },
 };
 
+// Actualiza el front al recibir un nuevo video
 export default class YuTub extends React.Component {  
     componentDidUpdate(prevProps) {
         if (this.props.data !== prevProps.data) {
@@ -23,22 +24,29 @@ export default class YuTub extends React.Component {
         <div>
             {
             this.props.data && (
+                // Funcion principal
                 <YouTube videoId={this.props.data} opts={opts} onReady={this._onReady} onEnd={this.props.vidEnd} />
                 ) 
             }
         </div>
         )
-    //return <YouTube videoId="Tn21l5YMxd0" opts={opts} onReady={this._onReady} />
     }   
+
+    // Evento del autoplay, curiosamente despues de la reproduccion inicial funciona
+    // Sin necesidad de mutear el video
+
   _onReady(event) {
     // access to player in all event handlers via event.target
     //event.target.pauseVideo();
       event.target.playVideo();
     }
+
+    // Funcion para el siguiente video por Props
     _onEnd(event) {
         //event.target.playVideo();
         this.props.vidEnd();
-    // access to player in all event handlers via event.target
+
+    // Pruebas para cambiar el video mediante props
     //event.target.pauseVideo();
     // viId = "bzJDimvPW1Y";
     // opts = {

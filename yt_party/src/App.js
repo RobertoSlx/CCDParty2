@@ -4,6 +4,7 @@ import axios from 'axios';
 import YuTub from './YuTub.js'
 import "@capaj/videojs-youtube";
 
+// Estilos 
 const MainPage = styled.section`
     align-items: center;
 `;
@@ -79,18 +80,21 @@ const TweetInfo = styled.div`
         margin-bottom: 1.2rem;
         text-shadow: 0px 0px 20px rgba(0,0,0, 0.4);
     }
-  `;
+`;
 
+// Main 
 const App = () => {
 
+  // Objetos y setters
   const [length, setLength] = useState(0);
   const [newVid, setNew] = useState(false); 
   const [loading, setLoad] = useState(true); 
   const [current, setCurrent] = useState(0);
   const [Jtwitts, setData] = useState(null);
-  //const timeout = useRef(null);
+  const [PlayList, setList] = useState([0]);
   const tooLong = useRef(null);
 
+  // Primer carga de la API
   useEffect(() => {
     //axios.get("http://localhost:3006/").then(response => {
     axios({
@@ -98,8 +102,8 @@ const App = () => {
       url: `http://localhost:3006/`,
       withCredentials: false
     }).then(response => {
-      console.log(response?.data);
-      console.log(response?.data.length);
+      //console.log(response?.data);
+      //console.log(response?.data.length);
       setLength(response?.data.length);
       setData(response?.data);
       setLoad(false);
@@ -138,7 +142,8 @@ const App = () => {
   // }, [Jtwitts, current])
   
   useEffect(() => {
-
+    // Funcion asincrona de cmbio de video por timeout
+    // entro de la uncion use effect para anunciar el cambio en el front
     const getNewData = () => {
       axios({
         method: 'get',
@@ -151,14 +156,15 @@ const App = () => {
           setLength(prevLengt);
         }
         console.log("Updated");
-        length = response?.length();
+        setLength(response?.data.length);
         setData(response?.data);
       })
     };
 
     const vidEnd = () => {
       if (!newVid) {
-        setCurrent(current => (current === length - 1 ? 0 : current + 1));
+        //setCurrent(current => (current === length - 1 ? 0 : current + 1));
+        setCurrent(getNextVid());
         getNewData();
       }
       else {
@@ -176,6 +182,7 @@ const App = () => {
         };
   }, [Jtwitts,current])
 
+  // Funciones de cambio de video por llamada vidEnd
   const getNewData = () => {
       axios({
         method: 'get',
@@ -188,24 +195,48 @@ const App = () => {
           setLength(prevLengt);
         }
         console.log("Updated");
-        length = response?.length();
+        setLength(response?.data.length);
         setData(response?.data);
       })
   };
-  
   const vidEnd = () => {
     if (tooLong.current) {
             clearTimeout(tooLong.current);
-        }
-    //setCurrent(current => (current === length - 1 ? 0 : current + 1));
+    }
+    
     if (!newVid) {
-      setCurrent(current => (current === length - 1 ? 0 : current + 1));
+      //setCurrent(current => (current === length - 1 ? 0 : current + 1));
+      setCurrent(getNextVid());
       getNewData();
     }
     else {
-      newVid = false;
+      setNew(false);
       setCurrent(length - 1);
       getNewData();
+    }
+  };
+
+  // Funcion para simuolar lista de reproduccion aleatoria
+  const getNextVid=()=>{
+    if(PlayList.length<2){
+      setList([0]);
+      for (let i = 1; i < length; i++){
+        setList(PlayList.push(i));
+      }
+      let next=Math.floor(Math.random()*(PlayList.length));
+      let vidNow=PlayList[next];
+      PlayList.splice(next,1);
+      //console.log(PlayList);
+      setList(PlayList);
+      return vidNow;
+    }
+    else{
+      let next=Math.floor(Math.random()*(PlayList.length));
+      let vidNow=PlayList[next];
+      PlayList.splice(next,1);
+      //console.log(PlayList);
+      setList(PlayList);
+      return vidNow;
     }
   };
 
